@@ -1,7 +1,8 @@
+use query::Query;
+
 pub fn handle_query(read: &str) -> String {
-    read
-        .graphemes(true)
-        .rev()
-        .flat_map(|g| g.chars())
-        .collect()
+    match read.parse::<Query>() {
+        Ok(query) => query.execute(),
+        Err(err) => String::from_str(""),
+    }
 }
