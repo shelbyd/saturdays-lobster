@@ -27,7 +27,7 @@ pub fn start() {
     drop(listener);
 }
 
-fn handle_client<T: Read + Write>(mut stream: T) {
+fn handle_client(mut stream: TcpStream) {
     let mut buf = [0; 4096];
     loop {
         match stream.read(&mut buf) {
@@ -40,14 +40,17 @@ fn handle_client<T: Read + Write>(mut stream: T) {
                 break
             },
             Ok(amount_read) => {
-                println!("read {} bytes", amount_read);
                 let read = buf.slice(0, amount_read);
                 let read_string = std::str::from_utf8(read).ok().unwrap().trim();
-                println!("read: \"{}\"", read_string);
+                log(&stream, format!("read: \"{}\"", read_string));
                 let response = handle_query(read_string);
-                println!("responding: \"{}\"", response);
+                log(&stream, format!("resp: \"{}\"", response));
                 stream.write(format!("{}\n", response).as_bytes());
             }
         }
     };
+}
+
+fn log(stream: &TcpStream, message: String) {
+    println!("remote={}: {}", stream.peer_addr().ok().unwrap(), message);
 }
