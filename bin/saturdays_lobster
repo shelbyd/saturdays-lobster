@@ -1,3 +1,7 @@
 #!/usr/bin/env ruby
 
 require 'saturdays_lobster'
+
+repl = SaturdaysLobster::Repl.new($stdin, $stdout)
+
+repl.loop
