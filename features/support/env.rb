@@ -15,7 +15,7 @@ class Output
   end
 
   def inspect
-    strings.join("\n")
+    strings.join("\n").inspect
   end
 end
 

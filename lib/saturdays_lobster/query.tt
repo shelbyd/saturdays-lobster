@@ -1,0 +1,41 @@
+grammar Query
+  rule create
+    'CREATE' space '(' space? node space? ')'
+  end
+
+  rule space
+    [ \t]+
+  end
+
+  rule node
+    label space ('{' (space? property space? ',')* (space? property space?) '}')?
+  end
+
+  rule label
+    ':' word
+  end
+
+  rule word
+    [a-zA-Z]+
+  end
+
+  rule property
+    word space? ':' space? value
+  end
+
+  rule value
+    string / number
+  end
+
+  rule string
+    '"' character* '"'
+  end
+
+  rule character
+    [^"]
+  end
+
+  rule number
+    [0-9]+
+  end
+end
