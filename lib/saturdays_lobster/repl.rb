@@ -11,7 +11,7 @@ module SaturdaysLobster
     def loop
       prompt
       while gotten = input.gets
-        output.puts CommandRunner.new(gotten).run
+        output.puts CommandRunner.new(gotten.strip).run
         prompt
       end
     end

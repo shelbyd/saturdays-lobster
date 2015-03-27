@@ -2,7 +2,11 @@ module SaturdaysLobster
   class CommandRunner < Struct.new(:command)
     def run
       if parsed.nil?
-        parser.failure_reason
+        [
+          parser.input.strip,
+          ' ' * (parser.failure_column - 1) + '^',
+          parser.failure_reason,
+        ].join("\n")
       else
         [
           'Nodes created: 1',

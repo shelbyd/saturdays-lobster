@@ -16,7 +16,7 @@ grammar Query
   end
 
   rule word
-    [a-zA-Z]+
+    [a-zA-Z_]+
   end
 
   rule property
