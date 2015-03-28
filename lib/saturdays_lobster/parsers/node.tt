@@ -1,0 +1,35 @@
+grammar Node
+  include Utility
+
+  rule node
+    variable:word? labels space? hash:('{' space? properties space? '}')?
+  end
+
+  rule labels
+    l:(label)* { def eval; l.elements.map(&:word); end }
+  end
+
+  rule label
+    ':' word
+  end
+
+  rule properties
+    property space? tail:(',' space? property)* {
+      def eval
+        hash = {}
+        ([property] + tail.elements.map(&:property)).each { |t|
+          hash[t.key.text_value] = t.value.text_value
+        }
+        hash
+      end
+    }
+  end
+
+  rule property
+    key:word space? ':' space? value:value
+  end
+
+  rule value
+    string / number
+  end
+end

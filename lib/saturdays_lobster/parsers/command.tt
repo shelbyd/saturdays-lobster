@@ -1,57 +1,7 @@
 grammar Command
+  include Node
+
   rule create
     'CREATE'i space '(' space? node space? ')' return:(space 'RETURN'i space variable:word)?
-  end
-
-  rule space
-    [ \t]+
-  end
-
-  rule node
-    variable:word? labels space? hash:('{' space? properties space? '}')?
-  end
-
-  rule labels
-    l:(label)* { def eval; l.elements.map(&:word); end }
-  end
-
-  rule label
-    ':' word
-  end
-
-  rule word
-    [a-zA-Z_]+
-  end
-
-  rule properties
-    property space? tail:(',' space? property)* {
-      def eval
-        hash = {}
-        ([property] + tail.elements.map(&:property)).each { |t|
-          hash[t.key.text_value] = t.value.text_value
-        }
-        hash
-      end
-    }
-  end
-
-  rule property
-    key:word space? ':' space? value:value
-  end
-
-  rule value
-    string / number
-  end
-
-  rule string
-    '"' character* '"'
-  end
-
-  rule character
-    [^"]
-  end
-
-  rule number
-    [0-9]+
   end
 end

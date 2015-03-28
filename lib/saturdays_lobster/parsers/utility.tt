@@ -1,0 +1,21 @@
+grammar Utility
+  rule space
+    [ \t]+
+  end
+
+  rule word
+    [a-zA-Z_]+
+  end
+
+  rule string
+    '"' character* '"'
+  end
+
+  rule character
+    [^"]
+  end
+
+  rule number
+    [0-9]+
+  end
+end
