@@ -1,3 +1,7 @@
+Given(/^I have executed "(.*)"$/) do |command|
+  SaturdaysLobster::CommandRunner.new(command).run
+end
+
 When(/^I execute "(.*)"$/) do |command|
   output << SaturdaysLobster::CommandRunner.new(command).run
 end
