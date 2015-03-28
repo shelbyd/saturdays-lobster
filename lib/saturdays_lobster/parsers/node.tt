@@ -10,7 +10,11 @@ grammar Node
   end
 
   rule labels
-    l:(label)* { def eval; l.elements.map(&:word); end }
+    l:(label)* {
+      def eval
+        l.elements.map(&:word).map(&:text_value).map(&:to_sym)
+      end
+    }
   end
 
   rule label
@@ -22,7 +26,7 @@ grammar Node
       def eval
         hash = {}
         ([property] + tail.elements.map(&:property)).each { |t|
-          hash[t.key.text_value] = t.value.text_value
+          hash[t.key.text_value.to_sym] = Kernel.eval t.value.text_value
         }
         hash
       end

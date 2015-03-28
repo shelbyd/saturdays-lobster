@@ -7,7 +7,7 @@ module SaturdaysLobster
 
       def returned_node
         if not syntax_tree.return.empty?
-          hash = created_node.properties.map { |key, value| "#{key}:#{value}" }.join(',')
+          hash = created_node.properties.map { |key, value| "#{key}:#{value.inspect}" }.join(',')
           [
             syntax_tree.return.variable.text_value,
             "Node[#{created_node.id}]{#{hash}}",
