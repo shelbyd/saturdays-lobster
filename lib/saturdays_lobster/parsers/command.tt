@@ -8,7 +8,11 @@ grammar Command
   end
 
   rule node
-    variable:word? labels:(label)* space? hash:('{' space? properties space? '}')?
+    variable:word? labels space? hash:('{' space? properties space? '}')?
+  end
+
+  rule labels
+    l:(label)* { def eval; l.elements.map(&:word); end }
   end
 
   rule label
