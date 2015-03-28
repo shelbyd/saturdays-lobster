@@ -1,6 +1,6 @@
 grammar Command
   rule create
-    'CREATE' space '(' space? node space? ')'
+    'CREATE'i space '(' space? node space? ')'
   end
 
   rule space
@@ -8,7 +8,7 @@ grammar Command
   end
 
   rule node
-    label space ('{' (space? property space? ',')* (space? property space?) '}')?
+    (label)* space? ('{' (space? property space? ',')* (space? property space?) '}')?
   end
 
   rule label

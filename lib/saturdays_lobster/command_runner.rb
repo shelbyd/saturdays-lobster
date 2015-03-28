@@ -17,12 +17,20 @@ module SaturdaysLobster
     end
 
     def property_count
+      unless properties.nil?
+        properties[1]
+          .elements
+          .size + 1
+      else
+        0
+      end
+    end
+
+    def properties
       parsed
         .node
         .elements[2]
-        .elements[1]
         .elements
-        .size + 1
     end
 
     def node_count
@@ -30,7 +38,11 @@ module SaturdaysLobster
     end
 
     def label_count
-      1
+      parsed
+        .node
+        .elements[0]
+        .elements
+        .size
     end
 
     def parser
