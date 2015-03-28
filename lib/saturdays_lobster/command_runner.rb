@@ -9,9 +9,9 @@ module SaturdaysLobster
         ].join("\n")
       else
         [
-          'Nodes created: 1',
+          "Nodes created: #{node_count}",
           "Properties set: #{property_count}",
-          'Labels added: 1',
+          "Labels added: #{label_count}",
         ].join("\n")
       end
     end
@@ -25,8 +25,16 @@ module SaturdaysLobster
         .size + 1
     end
 
+    def node_count
+      1
+    end
+
+    def label_count
+      1
+    end
+
     def parser
-      @parser ||= QueryParser.new
+      @parser ||= CommandParser.new
     end
 
     def parsed

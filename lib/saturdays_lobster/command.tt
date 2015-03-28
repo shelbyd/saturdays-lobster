@@ -1,4 +1,4 @@
-grammar Query
+grammar Command
   rule create
     'CREATE' space '(' space? node space? ')'
   end
