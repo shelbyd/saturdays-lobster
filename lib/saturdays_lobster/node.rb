@@ -1,6 +1,7 @@
 module SaturdaysLobster
   class Node
     def self.from_syntax_tree(tree)
+      tree = tree.inner_node
       new.tap do |n|
         n.properties = tree.hash.empty? ? {} : tree.hash.properties.eval
         n.labels = tree.labels.eval

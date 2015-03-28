@@ -2,6 +2,10 @@ grammar Node
   include Utility
 
   rule node
+    '(' space? inner_node space? ')'
+  end
+
+  rule inner_node
     variable:word? labels space? hash:('{' space? properties space? '}')?
   end
 

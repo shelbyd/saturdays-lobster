@@ -2,6 +2,6 @@ grammar Command
   include Node
 
   rule create
-    'CREATE'i space '(' space? node space? ')' return:(space 'RETURN'i space variable:word)?
+    'CREATE'i space node return:(space 'RETURN'i space variable:word)?
   end
 end
