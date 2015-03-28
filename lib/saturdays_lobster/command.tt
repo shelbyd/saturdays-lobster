@@ -1,6 +1,6 @@
 grammar Command
   rule create
-    'CREATE'i space '(' space? node space? ')'
+    'CREATE'i space '(' space? node space? ')' return:(space 'RETURN'i space variable:word)?
   end
 
   rule space
@@ -8,7 +8,7 @@ grammar Command
   end
 
   rule node
-    (label)* space? ('{' (space? property space? ',')* (space? property space?) '}')?
+    variable:word? labels:(label)* space? hash:('{' space? properties space? '}')?
   end
 
   rule label
@@ -19,8 +19,20 @@ grammar Command
     [a-zA-Z_]+
   end
 
+  rule properties
+    property space? tail:(',' space? property)* {
+      def eval
+        hash = {}
+        ([property] + tail.elements.map(&:property)).each { |t|
+          hash[t.key.text_value] = t.value.text_value
+        }
+        hash
+      end
+    }
+  end
+
   rule property
-    word space? ':' space? value
+    key:word space? ':' space? value:value
   end
 
   rule value

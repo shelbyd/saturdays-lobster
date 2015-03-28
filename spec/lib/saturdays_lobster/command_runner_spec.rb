@@ -16,6 +16,19 @@ describe SaturdaysLobster::CommandRunner do
       it { is_expected.to include 'Nodes created: 1' }
     end
 
+    describe 'create (p)' do
+      let(:command) { 'create (p)' }
+      it { is_expected.to include 'Nodes created: 1' }
+    end
+
+    describe 'create (p) return p' do
+      let(:command) { 'create (p) return p' }
+      it { is_expected.to include 'Nodes created: 1' }
+      it { is_expected.to include "p\n" }
+      it { is_expected.to include 'Node[1]{}' }
+      it { is_expected.to include '1 row' }
+    end
+
     describe 'CREATE (:Movie)' do
       let(:command) { 'CREATE (:Movie)' }
       it { is_expected.to include 'Labels added: 1' }
@@ -29,6 +42,11 @@ describe SaturdaysLobster::CommandRunner do
     describe 'CREATE ({ foo: "bar" })' do
       let(:command) { 'CREATE ({ foo: "bar" })' }
       it { is_expected.to include 'Properties set: 1' }
+    end
+
+    describe 'CREATE (node { foo: "bar" }) RETURN node' do
+      let(:command) { 'CREATE (node { foo: "bar" }) RETURN node' }
+      it { is_expected.to include 'Node[1]{foo:"bar"}' }
     end
 
     describe 'CREATE ({ foo: "bar", bar: 1234567 })' do

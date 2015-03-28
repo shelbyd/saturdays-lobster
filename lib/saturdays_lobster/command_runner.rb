@@ -8,29 +8,53 @@ module SaturdaysLobster
           parser.failure_reason,
         ].join("\n")
       else
-        [
-          "Nodes created: #{node_count}",
-          "Properties set: #{property_count}",
-          "Labels added: #{label_count}",
-        ].join("\n")
+        (returned_node + created_states).join("\n")
       end
+    end
+
+    def returned_node
+      if not parsed.return.empty?
+        hash = properties.map { |key, value| "#{key}:#{value}" }.join(',')
+        [
+          parsed.return.variable.text_value,
+          "Node[1]{#{hash}}",
+          '1 row'
+        ]
+      else
+        []
+      end
+    end
+
+    def created_states
+      [
+        "Nodes created: #{node_count}",
+        "Properties set: #{property_count}",
+        "Labels added: #{label_count}",
+      ]
     end
 
     def property_count
       unless properties.nil?
-        properties[1]
-          .elements
-          .size + 1
+        properties.keys.size
       else
         0
       end
     end
 
     def properties
+      if not hash.empty?
+        hash
+          .properties
+          .eval
+      else
+        {}
+      end
+    end
+
+    def hash
       parsed
         .node
-        .elements[2]
-        .elements
+        .hash
     end
 
     def node_count
@@ -40,7 +64,7 @@ module SaturdaysLobster
     def label_count
       parsed
         .node
-        .elements[0]
+        .labels
         .elements
         .size
     end
