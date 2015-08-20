@@ -2,6 +2,16 @@ require 'json'
 
 module Nodes
   class Source < Struct.new(:data_dir_path)
+    class << self
+      def data_dir_path=(path)
+        @@data_dir_path = path
+      end
+
+      def data_dir_path
+        @@data_dir_path ||= './data/production'
+      end
+    end
+
     def next
       @index = @index ? @index + 1 : 0
       objects[@index] || reset_and_try_again
@@ -23,6 +33,10 @@ module Nodes
     def current_file_path
       @file_index ||= 0
       "#{data_dir_path}/data/#{@file_index}.data"
+    end
+
+    def data_dir_path
+      super || self.class.data_dir_path
     end
 
     def objects

@@ -8,7 +8,14 @@ describe MachineQuery do
     describe 'empty query' do
       let(:query) { {} }
 
-      it { is_expected.to include Nodes::Source }
+      it { is_expected.to include Nodes::Source.new }
+    end
+
+    describe 'insert query' do
+      let(:query) { {
+        insert: {'some' => 'object'}
+        } }
+      it { is_expected.to include Nodes::Insert.new(query[:insert]) }
     end
   end
 end
