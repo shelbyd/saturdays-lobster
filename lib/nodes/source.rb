@@ -17,7 +17,12 @@ module Nodes
       objects[@index] || reset_and_try_again
     end
 
-    private
+    def matches?(other)
+      self.class == other.class &&
+      self.data_dir_path == other.data_dir_path
+    end
+
+    protected
 
     def reset_and_try_again
       @index = nil

@@ -33,5 +33,18 @@ describe Nodes::Filter do
 
       it { is_expected.to be_nil }
     end
+
+    context 'with a variable' do
+      let(:objects) { [{'id' => 16}] }
+      let(:filter) { {id: Variable.new} }
+
+      it { is_expected.to eq objects[0] }
+
+      it 'sets the value for the variable' do
+        subject
+
+        expect(node.variables.first.values).to eq [16]
+      end
+    end
   end
 end
