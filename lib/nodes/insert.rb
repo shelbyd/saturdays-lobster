@@ -1,3 +1,5 @@
+require 'fileutils'
+
 module Nodes
   class Insert < Struct.new(:row)
     class << self
@@ -21,6 +23,8 @@ module Nodes
     end
 
     def next
+      FileUtils.mkdir_p(File.dirname(current_file))
+      FileUtils.touch(current_file)
       File.open(current_file, 'a') do |file|
         file.puts row.to_json
       end
