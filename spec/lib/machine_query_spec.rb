@@ -17,5 +17,13 @@ describe MachineQuery do
         } }
       it { is_expected.to include Nodes::Insert.new(query[:insert]) }
     end
+
+    describe 'equals query' do
+      let(:query) do
+        { equals: { id: 42 } }
+      end
+
+      it { is_expected.to include Nodes::Filter.new(Nodes::Source.new, {id: 42}) }
+    end
   end
 end

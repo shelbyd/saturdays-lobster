@@ -5,7 +5,12 @@ class MachineQuery < Struct.new(:query)
     if query[:insert]
       [Nodes::Insert.new(query[:insert])]
     else
-      [Nodes::Source.new]
+      source = Nodes::Source.new
+      if query[:equals]
+        [Nodes::Filter.new(Nodes::Source.new, query[:equals])]
+      else
+        [Nodes::Source.new]
+      end
     end
   end
 end
