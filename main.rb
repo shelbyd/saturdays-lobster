@@ -14,12 +14,12 @@ def run_query(query)
     puts row
   end
 
-  puts "#{rows.size} row#{rows.size == 1 ? '' : 's'}"
+  puts "#{rows.size} row#{rows.size == 1 ? '' : 's'}" if rows.size > 0
 end
 
-(ARGV[0] || 0).to_i.times do
-  run_query insert: {id: rand(1000), name: rand(16 ** 8).to_s(16).upcase }
-end
+# (ARGV[0] || 0).to_i.times do
+#   run_query insert: {id: rand(10000), name: rand(16 ** 8).to_s(16).upcase }
+# end
 
 # run_query({
 #   make_fast: {
@@ -31,6 +31,6 @@ end
 
 run_query({
   equals: {
-    id: 42,
+    id: 768,
   }
 })

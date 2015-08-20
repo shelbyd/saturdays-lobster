@@ -4,5 +4,7 @@ class Indexes
   def self.all
     FileUtils.touch('./data/production/index/all.index')
     YAML.load(File.read('./data/production/index/all.index')) || []
+  rescue
+    []
   end
 end
