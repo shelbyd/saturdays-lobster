@@ -26,6 +26,9 @@ module Nodes
       filter.all? do |key, value|
         value == tree.filter[key]
       end &&
+      tree.filter.all? do |key, value|
+        value == filter[key]
+      end &&
       source.matches?(tree.source)
     end
   end

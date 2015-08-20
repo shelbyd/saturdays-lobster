@@ -47,4 +47,59 @@ describe Nodes::Filter do
       end
     end
   end
+
+  describe '#matches' do
+    let(:source) { double :source, matches?: true }
+    let(:filter) { {} }
+    let(:other_source) { source }
+    let(:other_filter) { filter }
+    let(:other) { described_class.new(other_source, other_filter) }
+    let(:this) { described_class.new(source, filter) }
+
+    subject { this.matches? other }
+
+    context 'with itself' do
+      it { is_expected.to be true }
+    end
+
+    context 'when self has a field other does not' do
+      let(:filter) { {id: 15} }
+      let(:other_filter) { {} }
+
+      it { is_expected.to be false }
+    end
+
+    context 'when other has a filter self does not' do
+      let(:filter) { {} }
+      let(:other_filter) { {id: 15} }
+
+      it { is_expected.to be false }
+    end
+
+    context 'with a variable in self' do
+      let(:filter) { {id: Variable.new} }
+      let(:other_filter) { {id: 15} }
+
+      it { is_expected.to be true }
+
+      it 'stores the value from the other filter' do
+        subject
+
+        expect(this.variables.first.values).to eq [15]
+      end
+    end
+
+    context 'with a variable in self' do
+      let(:filter) { {id: 15} }
+      let(:other_filter) { {id: Variable.new} }
+
+      it { is_expected.to be true }
+
+      it 'stores the value from the other filter' do
+        subject
+
+        expect(other.variables.first.values).to eq [15]
+      end
+    end
+  end
 end
