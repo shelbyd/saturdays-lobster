@@ -24,10 +24,10 @@ module Nodes
     def matches?(tree)
       tree.class == self.class &&
       filter.all? do |key, value|
-        value == tree.filter[key]
+        value == tree.filter[key] && !tree.filter[key].nil?
       end &&
       tree.filter.all? do |key, value|
-        value == filter[key]
+        value == filter[key] && !filter[key].nil?
       end &&
       source.matches?(tree.source)
     end

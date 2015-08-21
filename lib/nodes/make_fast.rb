@@ -28,6 +28,10 @@ module Nodes
       end
     end
 
+    def execution_time
+      0
+    end
+
     private
 
     def write_index_definition

@@ -76,6 +76,20 @@ describe Nodes::Filter do
       it { is_expected.to be false }
     end
 
+    context 'when self has a variable field other does not' do
+      let(:filter) { {id: Variable.new} }
+      let(:other_filter) { {} }
+
+      it { is_expected.to be false }
+    end
+
+    context 'when other has a variable field self does not' do
+      let(:filter) { {} }
+      let(:other_filter) { {id: Variable.new} }
+
+      it { is_expected.to be false }
+    end
+
     context 'with a variable in self' do
       let(:filter) { {id: Variable.new} }
       let(:other_filter) { {id: 15} }
