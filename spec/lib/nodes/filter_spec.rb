@@ -102,4 +102,22 @@ describe Nodes::Filter do
       end
     end
   end
+
+  describe '#execution_time' do
+    let(:source) { double :source }
+
+    subject { described_class.new(source, {id: 42}).execution_time }
+
+    context 'with no execution_time in source' do
+      before { allow(source).to receive(:execution_time).and_return 0 }
+
+      it { is_expected.to eq 0 }
+    end
+
+    context 'with execution_time of 5 in source' do
+      before { allow(source).to receive(:execution_time).and_return 5 }
+
+      it { is_expected.to eq 10 }
+    end
+  end
 end

@@ -6,7 +6,7 @@ require 'machine_query'
 require 'variable'
 
 def run_query(query)
-  tree = MachineQuery.new(query).eval_trees.first
+  tree = MachineQuery.new(query).eval_trees.min_by(&:execution_time)
   rows = []
 
   while (row = tree.next)
@@ -32,5 +32,6 @@ end
 run_query({
   equals: {
     id: 768,
+    name: "F9B865",
   }
 })

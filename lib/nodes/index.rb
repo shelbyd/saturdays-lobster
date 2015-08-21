@@ -15,6 +15,10 @@ module Nodes
       objects[@index += 1]
     end
 
+    def execution_time
+      objects.size
+    end
+
     private
 
     def objects

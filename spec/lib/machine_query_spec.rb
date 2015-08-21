@@ -40,6 +40,15 @@ describe MachineQuery do
 
         it { is_expected.to include Nodes::Index.new(0, [42]) }
       end
+
+      context 'with two filters' do
+        let(:query) do
+          { equals: { id: 42, name: 'foo' } }
+        end
+
+        it { is_expected.to include Nodes::Filter.new(Nodes::Filter.new(Nodes::Source.new, {id: 42}), {name: 'foo'}) }
+        it { is_expected.to include Nodes::Filter.new(Nodes::Filter.new(Nodes::Source.new, {name: 'foo'}), {id: 42}) }
+      end
     end
 
     describe 'make fast query' do

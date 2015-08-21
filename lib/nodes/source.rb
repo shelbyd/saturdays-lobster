@@ -22,6 +22,10 @@ module Nodes
       self.data_dir_path == other.data_dir_path
     end
 
+    def execution_time
+      objects.size * file_count
+    end
+
     protected
 
     def reset_and_try_again
@@ -53,6 +57,10 @@ module Nodes
           []
         end
       end
+    end
+
+    def file_count
+      Dir["#{data_dir_path}/data/*.data"].select { |f| File.file? f }.size
     end
   end
 end

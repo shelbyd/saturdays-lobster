@@ -6,13 +6,14 @@ describe Nodes::Source do
   let(:data_dir) { './data/test' }
   let(:raw_data_dir) { "#{data_dir}/data" }
 
+  let(:node) { described_class.new(data_dir) }
+
   after { FileUtils.rmtree(data_dir) }
 
   before { FileUtils.mkdir_p(raw_data_dir) }
   before { File.open("#{raw_data_dir}/0.data", 'w') { |f| f.write(file_contents) } }
 
   describe '#next' do
-    let(:node) { described_class.new(data_dir) }
     let(:call_count) { 0 }
     subject { call_count.times { node.next }; node.next }
 
@@ -104,6 +105,31 @@ describe Nodes::Source do
         let(:call_count) { 9 }
         it { is_expected.to be_nil }
       end
+    end
+  end
+
+  describe '#execution_time' do
+    subject { node.execution_time }
+
+    context 'with no objects' do
+      let(:objects) { [] }
+
+      it { is_expected.to eq 0 }
+    end
+
+    context 'with 3 objects' do
+      let(:objects) { 3.times.map { {} } }
+
+      it { is_expected.to eq 3 }
+    end
+
+    context 'with 10 objects and 3 files' do
+      let(:objects) { 10.times.map { {} } }
+
+      before { File.open("#{raw_data_dir}/1.data", 'w') { |f| f.write(file_contents) } }
+      before { File.open("#{raw_data_dir}/2.data", 'w') { |f| f.write(file_contents) } }
+
+      it { is_expected.to eq 30 }
     end
   end
 end

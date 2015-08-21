@@ -31,5 +31,9 @@ module Nodes
       end &&
       source.matches?(tree.source)
     end
+
+    def execution_time
+      source.execution_time * 2
+    end
   end
 end
