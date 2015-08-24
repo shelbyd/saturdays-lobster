@@ -6,7 +6,8 @@ class MachineQuery < Struct.new(:query)
     if query[:insert]
       [Nodes::Insert.new(query[:insert])]
     elsif query[:equals]
-      equals_trees(query[:equals])
+      trees = equals_trees(query[:equals])
+      replace_with_indexes(trees)
     elsif query[:make_fast]
       [Nodes::MakeFast.new(MachineQuery.new(query[:make_fast]).eval_trees)]
     elsif query == {}
@@ -16,13 +17,10 @@ class MachineQuery < Struct.new(:query)
     end
   end
 
+  private
+
   def equals_trees(filter)
     return [Nodes::Source.new] if filter.empty?
-
-    tree = Nodes::Filter.new(Nodes::Source.new, filter)
-    maybe_index = Indexes.all.find { |index| index.matches? tree }
-    index_id = Indexes.all.index(maybe_index)
-    return [Nodes::Index.new(index_id, maybe_index.variables.first.values)] if maybe_index
 
     filter.map do |key, value|
       [Hash[key, value], filter.reject { |k, v| k == key }]
@@ -31,5 +29,25 @@ class MachineQuery < Struct.new(:query)
         Nodes::Filter.new(tree, this_filter)
       end
     end.flatten
+  end
+
+  def replace_with_indexes(trees)
+    @indexes ||= Indexes.all
+    trees.map do |tree|
+      with_index(tree)
+    end
+  end
+
+  def with_index(tree)
+    index = @indexes.find { |index| index.matches? tree }
+    if index
+      index_id = @indexes.index(index)
+      Nodes::Index.new(index_id, index.variables.first.values)
+    else
+      if tree.respond_to?(:source)
+        tree.source = with_index(tree.source)
+      end
+      tree
+    end
   end
 end

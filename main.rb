@@ -21,17 +21,17 @@ end
 #   run_query insert: {id: rand(10000), name: rand(16 ** 8).to_s(16).upcase }
 # end
 
-run_query({
-  make_fast: {
-    equals: {
-      name: Variable.new
-    }
-  }
-})
-
 # run_query({
-#   equals: {
-#     id: 768,
-#     name: "F9B865",
+#   make_fast: {
+#     equals: {
+#       name: Variable.new
+#     }
 #   }
 # })
+
+run_query({
+  equals: {
+    id: 768,
+    name: '68BE0CB6',
+  }
+})

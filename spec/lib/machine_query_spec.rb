@@ -29,16 +29,18 @@ describe MachineQuery do
     end
 
     describe 'equals query' do
-      let(:query) do
-        { equals: { id: 42 } }
-      end
+      context 'with one filter' do
+        let(:query) do
+          { equals: { id: 42 } }
+        end
 
-      it { is_expected.to include Nodes::Filter.new(Nodes::Source.new, {id: 42}) }
+        it { is_expected.to include Nodes::Filter.new(Nodes::Source.new, {id: 42}) }
 
-      context 'with an index' do
-        before { allow(Indexes).to receive(:all).and_return [Nodes::Filter.new(Nodes::Source.new, {id: Variable.new})] }
+        context 'with an index' do
+          before { allow(Indexes).to receive(:all).and_return [Nodes::Filter.new(Nodes::Source.new, {id: Variable.new})] }
 
-        it { is_expected.to include Nodes::Index.new(0, [42]) }
+          it { is_expected.to include Nodes::Index.new(0, [42]) }
+        end
       end
 
       context 'with two filters' do
@@ -48,6 +50,12 @@ describe MachineQuery do
 
         it { is_expected.to include Nodes::Filter.new(Nodes::Filter.new(Nodes::Source.new, {id: 42}), {name: 'foo'}) }
         it { is_expected.to include Nodes::Filter.new(Nodes::Filter.new(Nodes::Source.new, {name: 'foo'}), {id: 42}) }
+
+        context 'with an index' do
+          before { allow(Indexes).to receive(:all).and_return [Nodes::Filter.new(Nodes::Source.new, {id: Variable.new})] }
+
+          it { is_expected.to include Nodes::Filter.new(Nodes::Index.new(0, [42]), {name: 'foo'}) }
+        end
       end
     end
 
